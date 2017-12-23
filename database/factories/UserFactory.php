@@ -18,8 +18,40 @@ $factory->define(App\User::class, function (Faker $faker) {
 
     return [
         'name' => $faker->name,
+        'username' => $faker->username,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
 });
+
+
+$factory->define(App\Category::class, function (Faker $faker) {
+    return [
+        'name' => $faker->name,
+        'slug' => str_slug($faker->name)
+    ];
+});
+
+$factory->define(App\Comment::class, function ($faker) {
+    return [
+        'body' => $faker->paragraph,
+        'user_id' => factory(App\User::class)->create()->id,
+        'commentable_id' => 1,
+        'commentable_type' => 'App\Article'
+    ];
+});
+
+$factory->define(App\Article::class, function (Faker $faker) {
+    return [
+        'title' => $faker->sentence,
+        'slug'  => str_slug($faker->sentence),
+        'body'  => $faker->text,
+        'user_id' => factory(App\User::class)->create()->id,
+        'category_id' => factory(App\Category::class)->create()->id
+    ];
+});
+
+/* $articles->each(function($article) {
+    factory(App\Comment::class, 3)->create(['commentable_id' => $article->id]);
+}); */
