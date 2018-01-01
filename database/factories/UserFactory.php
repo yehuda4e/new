@@ -52,6 +52,27 @@ $factory->define(App\Article::class, function (Faker $faker) {
     ];
 });
 
-/* $articles->each(function($article) {
-    factory(App\Comment::class, 3)->create(['commentable_id' => $article->id]);
-}); */
+$factory->define(App\ForumCategory::class, function ($faker) {
+    return [
+        'name' => $faker->sentence
+    ];
+});
+
+$factory->define(App\Forum::class, function ($faker) {
+    return [
+        'name' => $faker->sentence,
+        'slug' => $faker->slug,
+        'description' => $faker->paragraph,
+        'category_id' => 1
+    ];
+});
+
+$factory->define(App\Topic::class, function ($faker) {
+    return [
+        'title' => $faker->sentence,
+        'slug' => str_slug($faker->sentence),
+        'body' => $faker->text,
+        'user_id' => rand(1, 5),
+        'forum_id' => 1
+    ];
+});

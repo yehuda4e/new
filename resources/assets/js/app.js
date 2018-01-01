@@ -6,6 +6,7 @@
  */
 
 require('./bootstrap');
+require('../../../public/semantic-ui/semantic');
 
 window.Vue = require('vue');
 
