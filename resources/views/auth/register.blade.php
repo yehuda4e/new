@@ -21,17 +21,6 @@
                 @endif
             </div>
 
-            <div class="required field{{ $errors->has('name') ? ' error' : '' }}">
-                <label for="name">Name</label>
-                <input id="name" type="text" name="name" value="{{ old('name') }}" required>
-
-                @if ($errors->has('name'))
-                    <span class="ui visible error message">
-                        <strong>{{ $errors->first('name') }}</strong>
-                    </span>
-                @endif
-            </div>
-
             <div class="required field{{ $errors->has('email') ? ' error' : '' }}">
                 <label for="email">E-Mail Address</label>
                 <input id="email" type="email" name="email" value="{{ old('email') }}" required>

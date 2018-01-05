@@ -22,10 +22,12 @@
                 <a href="{{ route('register') }}" class="item">Register</a>
             @else
                 <div class="ui top right pointing dropdown item">
-                    {{ Auth::user()->name }} <i class="dropdown icon"></i>
+                    {{ Auth::user()->name }} &nbsp;
+                    <img class="ui avatar image" src="{{ auth()->user()->getAvatar() }}" alt="Yehuda" style="border:1px solid #ddd"> <i class="dropdown icon"></i>
 
                     <div class="menu">
                         <a href="/user/{{ auth()->user()->username }}" class="item">Profile</a>
+                        <a href="/settings" class="item">Settings</a>
                         <a href="{{ route('logout') }}" class="item"
                             onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">

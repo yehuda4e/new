@@ -12,7 +12,8 @@ class ArticleController extends Controller
         $this->middleware('auth')->except(['index', 'show']);
     }
 
-    public function index() {
+    public function index()
+    {
         return view('article.index');
     }
 
@@ -29,28 +30,33 @@ class ArticleController extends Controller
 
     public function store()
     {
+        request()->merge([
+            'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('slug'))
+        ]);
+
+
         $this->validate(request(), [
             'title' => 'required|min:3|max:255',
-            'slug'  => 'nullable|alpha_dash|unique:articles,slug|max:255',
+            'slug'  => 'required|alpha_dash|min:3|max:255|unique:articles,slug',
             'body' => 'required|min:3',
             'category' => 'required|exists:categories,id'
         ]);
 
         Article::create([
             'title' => request('title'),
-            'slug' => request('slug') ?? str_slug(request('title')), // May cause duplications. Need to fix.
+            'slug' => request('slug'),
             'body' => request('body'),
             'category_id' => request('category'),
             'user_id'   => auth()->id()
         ]);
 
-        return redirect()->route('home');
+        return redirect('/')->with('info', 'Your Article created successfuly!');
     }
 
     public function edit(Article $article)
     {
         if ($article->user->id !== auth()->id()) {
-            return redirect('/')->with('You can\'t edit article that is not your\'s.');
+            return redirect('/')->with('info', 'You can\'t edit article that is not your\'s.');
         }
 
         return view('article.form', [
@@ -62,22 +68,26 @@ class ArticleController extends Controller
 
     public function update(Article $article)
     {
+        request()->merge([
+            'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('slug'))
+        ]);
+        
         $this->validate(request(), [
             'title' => 'required|min:3|max:255',
-            'slug' => 'nullable|alpha_dash|max:255|unique:articles,slug,'.$article->id,
+            'slug' => 'required|alpha_dash|min:3|max:255|unique:articles,slug,'.$article->id,
             'body' => 'required|min:3',
             'category' => 'required|exists:categories,id'
         ]);
 
         $article->update([
             'title' => request('title'),
-            'slug' => request('slug') ?? str_slug(request('title')), // May cause duplications. Need to fix.
+            'slug' => request('slug'),
             'body' => request('body'),
             'category_id' => request('category'),
             'user_id' => auth()->id()
         ]);
 
-        return redirect()->route('home');
+        return redirect('/')->with('info', 'Your Article updated successfuly!');
     }
 
     public function destroy(Article $article)
@@ -89,7 +99,7 @@ class ArticleController extends Controller
         $article->comments()->delete();
         $article->delete();
 
-        return redirect('/')->with('The article deleted.');
+        return redirect('/')->with('info', 'The article deleted.');
     }
 
     public function comment(Article $article)

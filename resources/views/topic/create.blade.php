@@ -17,6 +17,15 @@
                     </span>
                 @endif                    
             </div>
+            <div class="field{{ $errors->has('title') ? '  error' : '' }}">
+                <label for="slug">Slug</label>
+                <input type="text" name="slug" placeholder="Your topic slug" value="{{ old('slug') }}">
+                @if ($errors->has('slug'))
+                    <span class="ui visible error message">
+                        <strong>{{ $errors->first('slug') }}</strong>
+                    </span>
+                @endif                    
+            </div>            
             <div class="required field{{ $errors->has('forum') ? ' error' : '' }}">
                 <label for="forum">Forum</label>
                 <select name="forum" id="forum">

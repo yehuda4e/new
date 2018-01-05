@@ -23,7 +23,7 @@
                     @if ($forum->lastActivity())
                     <div class="comment">
                         <a class="avatar">
-                            <img src="https://gravatar.com/avatar/{{ md5($forum->lastActivity()->user->email) }}?d=retro" alt="{{ $forum->lastActivity()->user->username }}">
+                            <img src="{{ $forum->lastActivity()->user->getAvatar() }}" alt="{{ $forum->lastActivity()->user->username }}">
                         </a>
                         <div class="content">
                             <div class="single line">

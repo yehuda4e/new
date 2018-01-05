@@ -11,16 +11,21 @@
             {{ (isset($method)) ? method_field('patch') : '' }}
             <div class="required field{{ $errors->has('title') ? ' error' : '' }}">
                 <label for="title">Title</label>
-                <input type="text" name="title" placeholder="title" value="{{ old('title') ?? $article->title ?? '' }}">
+                <input type="text" name="title" id="title" placeholder="title" value="{{ old('title') ?? $article->title ?? '' }}">
                 @if ($errors->has('title'))
                    <span class="ui visible error message">
                         <strong>{{ $errors->first('title') }}</strong>
                     </span>
                 @endif
             </div>
-            <div class="field{{ $errors->has('slug') ? ' error' : '' }}">
-                <label for="slug">Slug</label>
-                <input type="text" name="slug" placeholder="slug" value="{{ old('slug') ?? $article->slug ?? '' }}">
+            <div class="required field{{ $errors->has('slug') ? ' error' : '' }}">
+                <div class="inline required field">
+                    <label for="slug">Slug</label> 
+                    <span data-tooltip="The slug must contain only letters and numbers. Spaces will be replaced to hyphens." data-inverted="">
+                        <i class="help circle outline icon"></i> 
+                    </span>
+                </div>
+                <input type="text" name="slug" id="slug" placeholder="slug" value="{{ old('slug') ?? $article->slug ?? '' }}">
                 @if ($errors->has('slug'))
                    <span class="ui visible error message">
                         <strong>{{ $errors->first('slug') }}</strong>

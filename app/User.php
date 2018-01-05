@@ -14,9 +14,7 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'username', 'email', 'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -54,5 +52,16 @@ class User extends Authenticatable
         }
         
         return $this->avatar;
+    }
+
+    public function getNameAttribute()
+    {
+        if ($this->first_name && $this->last_name) {
+            return "{$this->first_name} {$this->last_name}";
+        } elseif ($this->first_name) {
+            return $this->first_name;
+        } else {
+            return $this->username;
+        }
     }
 }

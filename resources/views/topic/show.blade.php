@@ -9,7 +9,12 @@
     </thead>
     <tbody>
         <tr>
-            <td id="{{ $topic->id }}"><i class="fa fa-clock-o"></i> {{ $topic->created_at->diffForHumans() }}</td>
+            <td id="{{ $topic->id }}">
+                <i class="fa fa-clock-o"></i> {{ $topic->created_at->diffForHumans() }}
+                @if ($topic->user->id === auth()->id())
+                    <a class="ui mini yellow button right floated" onClick="editFormModal('topic')"><i class="fa fa-pencil"></i> Edit</a>
+                @endif
+            </td>
             <td class="center aligned" rowspan="2" valign="top">
                 <img src="{{ $topic->user->getAvatar() }}" alt="{{ $topic->user->username }}" class="ui small image" style="margin: auto;padding:3px;border: 3px solid #ddd;border-radius: 7px">
                 <h3 style="margin-top:5px"><a href="/user/{{ $topic->user->username }}">{{ $topic->user->username }}</a></h3>
@@ -17,12 +22,46 @@
         </tr>
         <tr>
             <td style="height: 250px;width:80%;vertical-align:top">
-                {{ $topic->body }}
+                <div class="ui topic modal">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <h3 class="header">Edit Comment</h3>
+                        </div>
+                        <div class="ui segment">
+                            <form action="/topic/{{ $topic->slug }}" method="post" class="ui form">
+                                    {{ csrf_field() }}
+                                    {{ method_field('patch') }}                
+                                <div class="field{{ $errors->has('edit') ? ' error': '' }}">
+                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $topic->edits()->latest()->first()->body ?? $topic->body }}</textarea>
+                                    @if ($errors->has('edit'))
+                                        <span class="ui visible error message">
+                                            {{ $errors->first('edit') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="field">
+                                    <button class="ui primaty button">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>                
+
+                <p id="t{{ $topic->id }}">{{ $topic->edits()->latest()->first()->body ?? $topic->body }}</p>
+
+                @if ($topic->edits->count())
+                    <i>The topic edited by {{ $topic->edits()->latest()->first()->user->username }} at {{ $topic->edits()->latest()->first()->created_at->diffForHumans() }}</i>
+                @endif                
             </td>
         </tr>
         @foreach ($topic->comments as $comment)
         <tr>
-            <td id="{{ $comment->id }}"><i class="fa fa-clock-o"></i> {{ $comment->created_at->diffForHumans() }}</td>
+            <td id="{{ $comment->id }}">
+                <i class="fa fa-clock-o"></i> {{ $comment->created_at->diffForHumans() }}
+                @if ($comment->user->id === auth()->id())
+                    <a class="ui mini yellow button right floated" onClick="editFormModal('', {{ $comment->id }})"><i class="fa fa-pencil"></i> Edit</a>
+                @endif                
+            </td>
             <td class="center aligned" rowspan="2" valign="top">
                 <img src="{{ $comment->user->getAvatar() }}" alt="{{ $comment->user->username }}" class="ui small image" style="margin: auto;padding:3px;border: 3px solid #ddd;border-radius: 7px">
                 <h3 style="margin-top:5px"><a href="/user/{{ $comment->user->username }}">{{ $comment->user->username }}</a></h3>
@@ -30,7 +69,35 @@
         </tr>
         <tr>
             <td style="height: 250px;width:80%;vertical-align:top">
-                {{ $comment->body }}
+                <div class="ui modal" id="c{{ $comment->id }}">
+                    <div class="ui segments">
+                        <div class="ui segment">
+                            <h3 class="header">Edit Comment</h3>
+                        </div>
+                        <div class="ui segment">
+                            <form action="/topic/{{ $topic->slug }}/comment/{{ $comment->id }}" method="post" class="ui form">
+                                    {{ csrf_field() }}
+                                    {{ method_field('patch') }}                
+                                <div class="field{{ $errors->has('edit') ? ' error': '' }}">
+                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $comment->edits()->latest()->first()->body ?? $comment->body }}</textarea>
+                                    @if ($errors->has('edit'))
+                                        <span class="ui visible error message">
+                                            {{ $errors->first('edit') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="field">
+                                    <button class="ui primaty button">Update</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>  
+                <p id="t{{ $comment->id }}">{{ $comment->edits()->latest()->first()->body ?? $comment->body }}</p>
+
+                @if ($comment->edits->count())
+                    <i>The comment edited by {{ $comment->edits()->latest()->first()->user->username }} at {{ $comment->edits()->latest()->first()->created_at->diffForHumans() }}</i>
+                @endif
             </td>
         </tr>      
         @endforeach
@@ -62,3 +129,28 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script>
+    function editFormModal(model = null,id = null) {
+
+        if (model === 'topic') {
+            $('.ui.topic.modal').modal({
+                blurring: true
+            }).modal('show');    
+        } else {
+            $(`#c${id}`).modal({
+                blurring: true
+            }).modal('show');             
+        }
+    }
+        
+  /*  function openEdit(id) {
+        const form = document.getElementById(`f${id}`);
+        const body = document.getElementById(`t${id}`);
+        form.style.display = 'block';
+        body.style.display = 'none';
+        console.log(form.style)
+    }*/
+</script>
+@endpush

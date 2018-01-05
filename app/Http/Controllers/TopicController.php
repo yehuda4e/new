@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Topic;
+use App\Comment;
 use Carbon\Carbon;
 
 class TopicController extends Controller
@@ -24,21 +25,27 @@ class TopicController extends Controller
      */
     public function store()
     {
+        request()->merge([
+            'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('title'))
+        ]);
+
+        
         $this->validate(request(), [
-            'title' => 'required|min:2|max:255',
+            'title' => 'required|min:3|max:255',
+            'slug' => 'alpha_dash|max:255|min:3|unique:topics,slug',
             'forum' => 'required|exists:forums,id',
             'body' => 'required|min:3|max:4000'
         ]);
 
         $newTopic = Topic::create([
             'title' => request('title'),
-            'slug' => str_slug(request('title')), //FIX
+            'slug' => request('slug'),
             'forum_id' => request('forum'),
             'user_id' => auth()->id(),
             'body' => request('body')
         ]);
 
-        return redirect('/forum');
+        return redirect('/forum')->with('info', 'You\'r topic created successfuly');
     }
 
     /**
@@ -56,7 +63,7 @@ class TopicController extends Controller
     public function comment(Topic $topic)
     {
         $this->validate(request(), [
-            'body' => 'required|min:2|max:255'
+            'body' => 'required|min:2|max:4000'
         ]);
 
         $topic->comments()->create([
@@ -68,30 +75,42 @@ class TopicController extends Controller
         // So everytime a new comment posted, this will be updated, and the topic will jump to the top.
         $topic->update(['updated_at' => Carbon::now()]);
 
-        return back();
+        return back()->with('info', 'You\'r comment sent successfuly');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Topic  $topic
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Topic $topic)
+    public function updateComment(Topic $topic, Comment $comment)
     {
-        //
+        $this->validate(request(), [
+            'edit' => 'required|min:2|max:4000'
+        ]);
+
+
+        $comment->edits()->create([
+            'body' => request('edit'),
+            'user_id' => auth()->id()
+        ]);
+
+        return back()->with('info', 'Your comment has been updated!');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Topic $topic)
+    public function update(Topic $topic)
     {
-        //
+        $this->validate(request(), [
+            'edit' => 'required|min:2|max:4000'
+        ]);
+
+        $topic->edits()->create([
+            'body' => request('edit'),
+            'user_id' => auth()->id()
+        ]);
+
+        return back()->with('info', 'Your comment has been updated!');
     }
 
     /**

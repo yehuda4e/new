@@ -17,4 +17,9 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function edits()
+    {
+        return $this->morphMany(Edit::class, 'editable');
+    }
 }

@@ -26,7 +26,7 @@
                 <div class="ui comments">
                     <div class="comment">
                         <a class="avatar">
-                            <img src="https://gravatar.com/avatar/{{ md5($topic->lastComment()->user->email) }}?d=retro" alt="{{ $topic->lastComment()->user->username }}">
+                            <img src="{{ $topic->lastComment()->user->getAvatar() }}" alt="{{ $topic->lastComment()->user->username }}">
                         </a>
                         <div class="content">
                             <a href="/user/{{ $topic->lastComment()->user->username }}" class="author">{{ $topic->lastComment()->user->username }}</a>
