@@ -51,6 +51,16 @@ class Article extends Model
     }
 
     /**
+     * Edits relationship
+     *
+     * @return Edit
+     */
+    public function edits()
+    {
+        return $this->morphMany(Edit::class, 'editable');
+    }
+
+    /**
      * Set the route key name as 'slug'
      *
      * @return void

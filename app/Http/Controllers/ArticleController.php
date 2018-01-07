@@ -25,7 +25,7 @@ class ArticleController extends Controller
 
     public function create()
     {
-        return view('article.form');
+        return view('article.createForm');
     }
 
     public function store()
@@ -42,7 +42,7 @@ class ArticleController extends Controller
             'category' => 'required|exists:categories,id'
         ]);
 
-        Article::create([
+        $article = Article::create([
             'title' => request('title'),
             'slug' => request('slug'),
             'body' => request('body'),
@@ -50,24 +50,15 @@ class ArticleController extends Controller
             'user_id'   => auth()->id()
         ]);
 
-        return redirect('/')->with('info', 'Your Article created successfuly!');
-    }
-
-    public function edit(Article $article)
-    {
-        if ($article->user->id !== auth()->id()) {
-            return redirect('/')->with('info', 'You can\'t edit article that is not your\'s.');
-        }
-
-        return view('article.form', [
-                'article' => $article,
-                'url' => '/'.$article->slug,
-                'method' => 'patch'
-            ]);
+        return redirect($article->slug)->with('info', 'Your Article created successfuly!');
     }
 
     public function update(Article $article)
     {
+        if ($article->user->id !== auth()->id()) {
+            return redirect('/')->with('info', 'You can\'t edit article that is not your\'s.');
+        }
+        
         request()->merge([
             'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('slug'))
         ]);
@@ -82,8 +73,12 @@ class ArticleController extends Controller
         $article->update([
             'title' => request('title'),
             'slug' => request('slug'),
-            'body' => request('body'),
             'category_id' => request('category'),
+            'user_id' => auth()->id()
+        ]);
+
+        $article->edits()->create([
+            'body' => request('body'),
             'user_id' => auth()->id()
         ]);
 
@@ -96,6 +91,7 @@ class ArticleController extends Controller
             return back();
         }
 
+        $article->edits()->delete();
         $article->comments()->delete();
         $article->delete();
 
