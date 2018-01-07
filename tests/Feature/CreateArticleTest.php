@@ -11,22 +11,34 @@ class CreateArticleTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function only_authenticated_users_may_create_an_article() {
-        $this->get('article/create')
+    public function unauthenticated_users_canot_create_an_article()
+    {
+        $this->get('/article/create')
             ->assertRedirect('/login');
 
-        $user = factory('App\User')->create();
-        $this->be($user);
+        $this->post('/article')
+            ->assertRedirect('/login');
+    }
 
-        // $this->post('article', [
-        //     'title' => 'test',
-        //     'slug' => 'test',
-        //     'category_id' => 1,
-        //     'user_id' => $user->id,
-        //     'body' => 'test'
-        // ]);
+    /** @test */
+    public function only_authenticated_users_may_create_an_article()
+    {
+        $this->be(factory('App\User')->create());
+        $article = factory('App\Article')->make([
+            'title' => 'article test',
+            'slug' => 'article-test',
+            'body' => 'body test',
+        ]);
 
-        // $this->get('test')
-        //     ->assertSee('test');
+        $this->post('/article', [
+            'title' => $article->title,
+            'slug' => $article->slug,
+            'body' => $article->body,
+            'category' => $article->category_id
+        ])->assertRedirect($article->slug);
+
+        $this->get($article->slug)
+        ->assertSee($article->title)
+        ->assertSee($article->body);
     }
 }

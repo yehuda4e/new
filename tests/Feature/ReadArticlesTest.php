@@ -12,28 +12,34 @@ class ReadArticlesTest extends TestCase
 
     protected $article;
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
 
         $this->article = factory('App\Article')->create();
     }
     
     /** @test */
-    public function a_user_can_view_all_articles() {
+    public function a_user_can_view_all_articles()
+    {
+        $article2 = factory('App\Article')->create();
         $this->get('/')
-            ->assertSee($this->article->title);
+            ->assertSee($this->article->title)
+            ->assertSee($article2->title);
     }
     
     /** @test */
-    public function a_user_can_view_a_single_article() {
+    public function a_user_can_view_a_single_article()
+    {
         $this->get($this->article->slug)
-            ->assertSee($this->article->title)   
-            ->assertSee($this->article->body);   
+            ->assertSee($this->article->title)
+            ->assertSee($this->article->body);
     }
     
     /** @test */
-    public function article_has_comments() {
-        $this->article->each(function($article) {
+    public function article_has_comments()
+    {
+        $this->article->each(function ($article) {
             $this->comments = factory('App\Comment', 3)->create(['commentable_id' => $article->id]);
         });
 
@@ -43,14 +49,15 @@ class ReadArticlesTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticated_user_may_not_add_a_comment() {
+    public function unauthenticated_user_may_not_add_a_comment()
+    {
         $this->post($this->article->slug.'/comment', [])
             ->assertRedirect('/login');
-        
     }
 
     /** @test */
-    public function an_authenticated_user_may_comment_on_the_article() {
+    public function an_authenticated_user_may_comment_on_the_article()
+    {
         $user = factory('App\User')->create();
         $this->be($user);
 
@@ -61,5 +68,4 @@ class ReadArticlesTest extends TestCase
         $this->get($this->article->slug)
             ->assertSee($comment->body);
     }
-
 }
