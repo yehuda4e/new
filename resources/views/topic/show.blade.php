@@ -32,7 +32,7 @@
                                     {{ csrf_field() }}
                                     {{ method_field('patch') }}                
                                 <div class="field{{ $errors->has('edit') ? ' error': '' }}">
-                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $topic->edits()->latest()->first()->body ?? $topic->body }}</textarea>
+                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $topic->edits()->lastEdit()->body ?? $topic->body }}</textarea>
                                     @if ($errors->has('edit'))
                                         <span class="ui visible error message">
                                             {{ $errors->first('edit') }}
@@ -47,10 +47,10 @@
                     </div>
                 </div>                
 
-                <p id="t{{ $topic->id }}">{{ $topic->edits()->latest()->first()->body ?? $topic->body }}</p>
+                <p id="t{{ $topic->id }}">{{ $topic->edits()->lastEdit()->body ?? $topic->body }}</p>
 
                 @if ($topic->edits->count())
-                    <i>The topic edited by {{ $topic->edits()->latest()->first()->user->username }} at {{ $topic->edits()->latest()->first()->created_at->diffForHumans() }}</i>
+                    <i>The topic edited by {{ $topic->edits()->lastEdit()->user->username }} at {{ $topic->edits()->lastEdit()->created_at->diffForHumans() }}</i>
                 @endif                
             </td>
         </tr>
@@ -79,7 +79,7 @@
                                     {{ csrf_field() }}
                                     {{ method_field('patch') }}                
                                 <div class="field{{ $errors->has('edit') ? ' error': '' }}">
-                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $comment->edits()->latest()->first()->body ?? $comment->body }}</textarea>
+                                    <textarea name="edit" id="edit" cols="30" rows="10" required>{{ old('edit') ?? $comment->edits()->lastEdit()->body ?? $comment->body }}</textarea>
                                     @if ($errors->has('edit'))
                                         <span class="ui visible error message">
                                             {{ $errors->first('edit') }}
@@ -93,10 +93,10 @@
                         </div>
                     </div>
                 </div>  
-                <p id="t{{ $comment->id }}">{{ $comment->edits()->latest()->first()->body ?? $comment->body }}</p>
+                <p id="t{{ $comment->id }}">{{ $comment->edits()->lastEdit()->body ?? $comment->body }}</p>
 
                 @if ($comment->edits->count())
-                    <i>The comment edited by {{ $comment->edits()->latest()->first()->user->username }} at {{ $comment->edits()->latest()->first()->created_at->diffForHumans() }}</i>
+                    <i>The comment edited by {{ $comment->edits()->lastEdit()->user->username }} at {{ $comment->edits()->lastEdit()->created_at->diffForHumans() }}</i>
                 @endif
             </td>
         </tr>      
@@ -144,13 +144,5 @@
             }).modal('show');             
         }
     }
-        
-  /*  function openEdit(id) {
-        const form = document.getElementById(`f${id}`);
-        const body = document.getElementById(`t${id}`);
-        form.style.display = 'block';
-        body.style.display = 'none';
-        console.log(form.style)
-    }*/
-</script>
+ </script>
 @endpush

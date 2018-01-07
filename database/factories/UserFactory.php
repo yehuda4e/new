@@ -70,11 +70,12 @@ $factory->define(App\Forum::class, function ($faker) {
 });
 
 $factory->define(App\Topic::class, function ($faker) {
+    $title = $faker->sentence;
     return [
-        'title' => $faker->sentence,
-        'slug' => str_slug($faker->sentence),
+        'title' => $title,
+        'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], $title),
         'body' => $faker->text,
-        'user_id' => rand(1, 5),
+        'user_id' => 1,
         'forum_id' => 1
     ];
 });

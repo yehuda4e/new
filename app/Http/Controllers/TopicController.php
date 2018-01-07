@@ -8,6 +8,10 @@ use Carbon\Carbon;
 
 class TopicController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('show');
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -26,7 +30,7 @@ class TopicController extends Controller
     public function store()
     {
         request()->merge([
-            'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('title'))
+            'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('slug') ?? request('title'))
         ]);
 
         
@@ -45,7 +49,7 @@ class TopicController extends Controller
             'body' => request('body')
         ]);
 
-        return redirect('/forum')->with('info', 'You\'r topic created successfuly');
+        return redirect('topic/'.$newTopic->slug)->with('info', 'You\'r topic created successfuly');
     }
 
     /**
