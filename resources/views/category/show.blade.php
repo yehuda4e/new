@@ -3,10 +3,12 @@
 @section('content')
 <div class="ui two column grid">
     <div class="twelve wide column">
-        @foreach($articles = $category->articles()->paginate() as $article)
-            @include('article.article')
-        @endforeach
-        {{ $articles->links() }}
+        @if ($category->articles_count)
+            @foreach($articles = $category->articles()->with(['category', 'user'])->paginate() as $article)
+                @include('article.article')
+            @endforeach
+            {{ $articles->links() }}
+        @endif
     </div>
     <div class="four wide column">
         <div class="ui stacked segments">

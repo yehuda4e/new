@@ -3,7 +3,7 @@
 @section('content')
 <div class="ui two column grid">
     <div class="twelve wide column">
-        @foreach($articles = \App\Article::latest()->paginate() as $article)
+        @foreach($articles as $article)
             @include('article.article')
         @endforeach
         {{ $articles->links() }}

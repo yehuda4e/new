@@ -22,7 +22,9 @@
         @include('layouts.nav')
         <div class="ui container">
             @yield('content')
-            @include('layouts.alert')
+            @if (Session::has('info'))
+                @include('layouts.alert')
+            @endif
         </div>
     </div>
 

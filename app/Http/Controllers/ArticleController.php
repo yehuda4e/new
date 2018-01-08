@@ -14,11 +14,25 @@ class ArticleController extends Controller
 
     public function index()
     {
-        return view('article.index');
+        $articles = Article::withCount(['comments', 'edits'])
+                            ->with(['user', 'category'])
+                            ->latest()
+                            ->paginate();
+                            
+        return view('article.index', compact('articles'));
     }
 
-    public function show(Article $article)
+    public function show($article)
     {
+        $article = Article::whereSlug($article)
+                            ->with(['user:id,username', 'category','comments.user'])
+                            ->withCount(['comments', 'edits'])
+                            ->first();
+
+        if (!$article) {
+            abort(404);
+        }
+        
         Redis::incr("article.$article->id.views");
         return view('article.show', compact('article'));
     }
@@ -82,7 +96,7 @@ class ArticleController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return redirect('/')->with('info', 'Your Article updated successfuly!');
+        return back()->with('info', 'Your Article updated successfuly!');
     }
 
     public function destroy(Article $article)

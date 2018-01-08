@@ -15,16 +15,18 @@
         </h3>
     </div>
     <div class="ui segment">
-        <p>{{ $article->edits()->lastEdit()->body ?? $article->body }}</p>
-        @if ($article->edits()->count())
+        @if ($article->edits_count)
+            <p>{{ $article->edits()->lastEdit()->body }}</p>
             <i>This article edited by {{ $article->edits()->lastEdit()->user->username }} at {{ $article->edits()->lastEdit()->created_at->diffForHumans() }}</i>
+        @else
+            <p>{{ $article->body }}</p>
         @endif
     </div>
     <div class="ui secondary segment" style="display: flex">
         <div style="flex: 1">
             <i class="fa fa-user" title="created by"></i> <a href="/user/{{ $article->user->username }}">{{ $article->user->username }}</a>
             &#x1F550; <time>{{ $article->created_at->diffForHumans() }}</time> 
-            &#x1F4AC; <a href="/{{ $article->slug }}#comments">{{ $article->comments()->count() }} {{ str_plural('comment', $article->comments()->count()) }}</a>
+            &#x1F4AC; <a href="/{{ $article->slug }}#comments">{{ $article->comments_count }} {{ str_plural('comment', $article->comments_count) }}</a>
             &#128065; {{ $article->views }} {{ str_plural('view', $article->views) }}
         </div>
         Category:&nbsp;<a href="/category/{{ $article->category->slug }}" title="Category">{{ $article->category->name }}</a>

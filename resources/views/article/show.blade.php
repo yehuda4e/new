@@ -12,26 +12,27 @@
             </div>
             <div class="ui segment">
                 <div class="ui comments">
-                    @foreach ($article->comments as $comment)
-                    <div class="comment" id="{{ $comment->id }}">
-                        <a class="avatar">
-                            <img src="https://gravatar.com/avatar/{{ md5($comment->user->email) }}?d=retro">
-                        </a>
-                        <div class="content">
-                            <a href="/user/{{ $comment->user->username }}" class="author">{{ $comment->user->username }}</a>
-                            <div class="metadata">
-                                <span class="date">{{ $comment->created_at->diffForHumans() }}</span>
+                    @if ($article->comments_count)
+                        @foreach ($article->comments as $comment)
+                        <div class="comment" id="{{ $comment->id }}">
+                            <a class="avatar">
+                                <img src="https://gravatar.com/avatar/{{ md5($comment->user->email) }}?d=retro">
+                            </a>
+                            <div class="content">
+                                <a href="/user/{{ $comment->user->username }}" class="author">{{ $comment->user->username }}</a>
+                                <div class="metadata">
+                                    <span class="date">{{ $comment->created_at->diffForHumans() }}</span>
+                                </div>
+                                <div class="text">
+                                    {{ $comment->body }}
+                                </div>
+                                <div class="actions">
+                                    <a class="reply">Reply</a>
+                                </div>
                             </div>
-                            <div class="text">
-                                {{ $comment->body }}
-                            </div>
-                            <div class="actions">
-                                <a class="reply">Reply</a>
-                            </div>
-                        </div>
-                    </div>         
-                            
-                    @endforeach
+                        </div>         
+                        @endforeach
+                    @endif
                     <div class="ui dividing header"></div>
                     @auth
                         <form action="{{ $article->slug}}/comment" method="post" class="ui reply form">
