@@ -17,9 +17,4 @@ class Edit extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function scopeLastEdit($query)
-    {
-        return $query->latest()->first();
-    }
 }

@@ -28,5 +28,6 @@ Route::post('article', 'ArticleController@store');
 Route::get('article/create', 'ArticleController@create');
 Route::get('{article}', 'ArticleController@show');
 Route::post('{article}/comment', 'ArticleController@comment');
+Route::get('{article}/edit', 'ArticleController@edit');
 Route::patch('{article}', 'ArticleController@update');
 Route::delete('{article}', 'ArticleController@destroy');

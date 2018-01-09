@@ -36,11 +36,5 @@
             return false;
         });
     }
-
-    function editArticle(id) {
-        $(`#a${id}`).modal({
-            blurring: true
-        }).modal('show'); 
-    }
 </script>
 @endpush

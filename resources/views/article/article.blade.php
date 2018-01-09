@@ -4,20 +4,19 @@
         <h3 class="header" style="display: flex">
             <a href="/{{ $article->slug }}" style="flex: 1">{{ $article->title }}</a>
             @if ($article->user->id === auth()->id())
-            <a class="ui tiny yellow button" onclick="editArticle({{ $article->id }})"><i class="fa fa-pencil"></i> Edit</a>&nbsp;
+            <a class="ui tiny yellow button" href="{{ $article->slug }}/edit"><i class="fa fa-pencil"></i> Edit</a>&nbsp;
             <form action="/{{ $article->slug }}" method="post" onclick="deleteArticle(event, this)">
                 {{ csrf_field() }}
                 {{ method_field('delete') }}
                 <button type="submit" class="ui tiny red button"><i class="fa fa-trash"></i> Delete</button>
             </form>
-            @include('article.editForm')
             @endif
         </h3>
     </div>
     <div class="ui segment">
         @if ($article->edits_count)
-            <p>{{ $article->edits()->lastEdit()->body }}</p>
-            <i>This article edited by {{ $article->edits()->lastEdit()->user->username }} at {{ $article->edits()->lastEdit()->created_at->diffForHumans() }}</i>
+            <p>{{ $article->edits->last()->body }}</p>
+            <i>This article edited by {{ $article->edits->last()->user->username }} at {{ $article->edits->last()->created_at->diffForHumans() }}</i>
         @else
             <p>{{ $article->body }}</p>
         @endif

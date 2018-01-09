@@ -15,9 +15,9 @@ class ArticleController extends Controller
     public function index()
     {
         $articles = Article::withCount(['comments', 'edits'])
-                            ->with(['user', 'category'])
+                            ->with(['user', 'category', 'edits', 'edits.user:id,username'])
                             ->latest()
-                            ->paginate();
+                            ->paginate(10);
                             
         return view('article.index', compact('articles'));
     }
@@ -39,7 +39,7 @@ class ArticleController extends Controller
 
     public function create()
     {
-        return view('article.createForm');
+        return view('article.create');
     }
 
     public function store()
@@ -65,6 +65,15 @@ class ArticleController extends Controller
         ]);
 
         return redirect($article->slug)->with('info', 'Your Article created successfuly!');
+    }
+
+    public function edit(Article $article)
+    {
+        if ($article->user->id !== auth()->id()) {
+            return redirect('/');
+        }
+        
+        return view('article.edit', compact('article'));
     }
 
     public function update(Article $article)
@@ -96,7 +105,7 @@ class ArticleController extends Controller
             'user_id' => auth()->id()
         ]);
 
-        return back()->with('info', 'Your Article updated successfuly!');
+        return redirect($article->slug)->with('info', 'Your Article updated successfuly!');
     }
 
     public function destroy(Article $article)

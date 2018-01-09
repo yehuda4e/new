@@ -20,6 +20,8 @@ class Article extends Model
      */
     public $perPage = 3;
 
+    // protected $with = ['edits.user'];
+
     /**
      * User relationship
      *
