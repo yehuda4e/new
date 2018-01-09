@@ -15,8 +15,8 @@
                 @endif
             </td>
             <td class="center aligned collapsing">
-                <p>{{ $forum->topics()->count() }}<br> <strong>Topics</strong></p>
-                <p>{{ $forum->comments()->count() }}<br> <strong>Comments</strong></p>
+                <p>{{ $forum->topics_count }}<br> <strong>{{ str_plural('Topic', $forum->topics_count) }}</strong></p>
+                <p>{{ $forum->comments_count }}<br> <strong>{{ str_plural('comment', $forum->comments_count) }}</strong></p>
             </td>
             <td>
                 <div class="ui comments">

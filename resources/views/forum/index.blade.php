@@ -2,6 +2,8 @@
 
 @section('content')
     @foreach ($categories as $category)
-        @include ('forum.forums')
+        @if ($category->forums_count)
+            @include ('forum.forums')
+        @endif
     @endforeach
 @endsection

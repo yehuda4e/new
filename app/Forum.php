@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Forum extends Model
 {
+    protected $withCount = ['topics', 'comments'];
+
     public function category()
     {
         return $this->belongsTo(Category::class);
@@ -23,17 +25,20 @@ class Forum extends Model
 
     public function LastActivity()
     {
-        $lastTopic = $this->topics()->with('user')->latest()->first() ?? false;
-        $lastComment = $this->comments()->with('user')->latest()->first() ?? false;
+        $lastTopic = $this->topics->last();
+        $lastComment = $this->comments->last();
 
-        // check if there are a topics and also comments, and who will show
-        if ($lastTopic && $lastComment) {
+        // Check if there are topics and also comments on the forun.
+        if ($this->topics_count && $this->comments_count) {
             return ($lastTopic->created_at > $lastComment->created_at) ? $lastTopic : $lastComment;
-            // if there are only topics
-        } elseif ($lastTopic) {
+        }
+
+        // Check if there are topics.
+        if ($this->topics_count) {
             return $lastTopic;
         }
 
+        // return false if the forum is empty.
         return false;
     }
 

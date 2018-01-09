@@ -16,7 +16,7 @@ class ForumController extends Controller
     public function index()
     {
         return view('forum.index', [
-            'categories' => ForumCategory::all()
+            'categories' => ForumCategory::with(['forums','forums.topics',])->get()
         ]);
     }
 
