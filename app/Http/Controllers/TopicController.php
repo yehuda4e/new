@@ -58,8 +58,10 @@ class TopicController extends Controller
      * @param  \App\Topic  $topic
      * @return \Illuminate\Http\Response
      */
-    public function show(Topic $topic)
+    public function show($topic)
     {
+        $topic = Topic::whereSlug($topic)->with(['comments.user', 'comments.edits'])->first();
+
         \Redis::incr("topic.{$topic->id}.views");
         return view('topic.show', compact('topic'));
     }

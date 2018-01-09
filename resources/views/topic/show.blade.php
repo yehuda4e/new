@@ -55,6 +55,7 @@
             </td>
         </tr>
         @foreach ($topic->comments as $comment)
+        {{--  {{ dd($comment)}}  --}}
         <tr>
             <td id="{{ $comment->id }}">
                 <i class="fa fa-clock-o"></i> {{ $comment->created_at->diffForHumans() }}
