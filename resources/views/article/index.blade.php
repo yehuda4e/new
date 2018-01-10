@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="ui two column grid">
+<div class="ui two column stackable grid">
     <div class="twelve wide column">
         @foreach($articles as $article)
             @include('article.article')

@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="ui two column grid">
+<div class="ui two column stackable grid">
     <div class="twelve wide column">
         @if ($category->articles_count)
-            @foreach($articles = $category->articles()->with(['category', 'user'])->paginate() as $article)
+            @foreach($articles = $category->articles()->with(['category', 'user'])->withCount(['comments', 'edits'])->paginate() as $article)
                 @include('article.article')
             @endforeach
             {{ $articles->links() }}
