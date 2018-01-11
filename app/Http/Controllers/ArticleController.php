@@ -17,7 +17,7 @@ class ArticleController extends Controller
         $articles = Article::withCount(['comments', 'edits'])
                             ->with(['user', 'category', 'edits', 'edits.user:id,username'])
                             ->latest()
-                            ->paginate(10);
+                            ->paginate();
                             
         return view('article.index', compact('articles'));
     }
@@ -25,7 +25,7 @@ class ArticleController extends Controller
     public function show($article)
     {
         $article = Article::whereSlug($article)
-                            ->with(['user:id,username', 'category','comments.user'])
+                            ->with(['user', 'category','comments.user'])
                             ->withCount(['comments', 'edits'])
                             ->first();
 

@@ -4,11 +4,11 @@
         <h3 class="header" style="display: flex">
             <a href="/{{ $article->slug }}" style="flex: 1">{{ $article->title }}</a>
             @if ($article->user->id === auth()->id())
-            <a class="ui tiny yellow button" href="/{{ $article->slug }}/edit"><i class="fa fa-pencil"></i> Edit</a>&nbsp;
+            <a class="ui yellow label" href="/{{ $article->slug }}/edit" title="Edit"><i class="fa fa-pencil"></i></a>&nbsp;
             <form action="/{{ $article->slug }}" method="post" onclick="deleteArticle(event, this)">
                 {{ csrf_field() }}
                 {{ method_field('delete') }}
-                <button type="submit" class="ui tiny red button"><i class="fa fa-trash"></i> Delete</button>
+                <button type="submit" class="ui red label" title="Delete" style="cursor:pointer"><i class="fa fa-trash"></i></button>
             </form>
             @endif
         </h3>
