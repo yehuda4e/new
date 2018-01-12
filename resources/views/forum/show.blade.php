@@ -25,7 +25,7 @@
                 by <a href="/user/{{ $topic->user->username }}">{{ $topic->user->username }}</a> at {{ $topic->created_at->diffForHumans() }}
             </td> 
             <td class="collapsing center aligned">
-                {{ $topic->comments_count }} <strong>{{ str_plural('comment', $topic->comments_countp) }}</strong><br>
+                {{ $topic->comments_count }} <strong>{{ str_plural('comment', $topic->comments_count) }}</strong><br>
                 {{ $topic->views }} <strong>{{ str_plural('view', $topic->views) }}</strong>
             </td>
             <td>
