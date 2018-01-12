@@ -1,7 +1,7 @@
 <table class="ui celled striped table stacked segments">
     <thead>
         <tr>
-            <th colspan="4"><a href="/forum/category/{{ $category->name }}"><strong>{{ $category->name }}</strong></a></th>
+            <th colspan="4"><a href="/forum/category/{{ $category->slug }}"><strong>{{ $category->name }}</strong></a></th>
         </tr>
     </thead>
     <tbody>

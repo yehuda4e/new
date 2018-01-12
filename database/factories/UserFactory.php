@@ -55,8 +55,10 @@ $factory->define(App\Article::class, function (Faker $faker) {
 });
 
 $factory->define(App\ForumCategory::class, function ($faker) {
+    $name = $faker->sentence;
     return [
-        'name' => $faker->sentence
+        'name' => $name,
+        'slug' => str_slug($name)
     ];
 });
 

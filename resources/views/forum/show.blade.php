@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+<div class="ui breadcrumb">
+    <a class="section" href="/forum/category/{{ $forum->category->slug }}">{{ $forum->category->name }}</a>
+    <div class="divider"> / </div>
+    <div class="active section">{{ $forum->name }}</div>    
+</div>
+
 <table class="ui celled striped table tall stacked segments">
     <thead>
         <tr>
