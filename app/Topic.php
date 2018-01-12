@@ -30,6 +30,11 @@ class Topic extends Model
         return $this->morphMany(Edit::class, 'editable');
     }
 
+    public function likes()
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
     public function lastComment()
     {
         return $this->comments()->with('user')->latest()->first() ?? $this;
@@ -43,5 +48,21 @@ class Topic extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public function like()
+    {
+        if (!$this->likes()->where(['user_id' => auth()->id()])->exists()) {
+            $this->likes()->create([
+                'user_id' => auth()->id(),
+            ]);
+        }
+    }
+
+    public function unlike()
+    {
+        if ($this->likes()->where(['user_id' => auth()->id()])->exists()) {
+            $this->likes()->delete();
+        }
     }
 }

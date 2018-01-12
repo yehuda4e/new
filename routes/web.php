@@ -8,6 +8,8 @@ Route::get('forum/{forum}', 'ForumController@show');
 Route::get('forum/category/{category}', 'ForumCategoryController@index');
 Route::get('topic/create', 'TopicController@create');
 Route::get('topic/{topic}', 'TopicController@show');
+Route::get('topic/{topic}/like', 'TopicController@like');
+Route::get('topic/{topic}/unlike', 'TopicController@unlike');
 Route::post('topic/{topic}/comment', 'TopicController@comment');
 Route::patch('topic/{topic}/comment/{comment}', 'TopicController@updateComment');
 Route::post('topic', 'TopicController@store');
@@ -22,6 +24,8 @@ Route::patch('settings/avatar', 'SettingsController@avatarAndCover');
 Route::patch('settings/password', 'SettingsController@password');
 Route::patch('settings/signature', 'SettingsController@signature');
 
+Route::get('/comment/{comment}/like', 'CommentController@like');
+Route::get('/comment/{comment}/unlike', 'CommentController@unlike');
 
 Route::get('/', 'ArticleController@index')->name('home');
 Route::post('article', 'ArticleController@store');

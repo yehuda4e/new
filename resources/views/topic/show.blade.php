@@ -19,8 +19,14 @@
         <tr>
             <td id="{{ $topic->id }}">
                 <i class="fa fa-clock-o"></i> {{ $topic->created_at->diffForHumans() }}
+                @if (!$topic->likes()->hasLiked())
+                    <a href="/topic/{{ $topic->slug }}/like" title="Like this topic" role="button"><i class="heart icon"></i></a>
+                @else
+                    <a href="/topic/{{ $topic->slug }}/unlike" title="Unlike this topic" role="button"><i class="red heart icon"></i></a>
+                @endif
+                {{ $topic->likes_count }}                  
                 @if ($topic->user->id === auth()->id())
-                    <a class="ui mini yellow button right floated" onClick="editFormModal('topic')"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="ui mini yellow button right floated" onClick="editFormModal('topic')" title="Edit"><i class="fa fa-pencil"></i></a>
                 @endif
             </td>
             <td class="center aligned" rowspan="2" valign="top">
@@ -67,8 +73,14 @@
         <tr>
             <td id="{{ $comment->id }}">
                 <i class="fa fa-clock-o"></i> {{ $comment->created_at->diffForHumans() }}
+                @if (!$comment->likes()->hasLiked())
+                    <a href="/comment/{{ $comment->id }}/like" title="Like this comment" role="button"><i class="heart icon"></i></a>
+                @else
+                    <a href="/comment/{{ $comment->id }}/unlike" title="Unlike this comment" role="button"><i class="red heart icon"></i></a>
+                @endif
+                {{ $comment->likes_count }}                
                 @if ($comment->user->id === auth()->id())
-                    <a class="ui mini yellow button right floated" onClick="editFormModal('', {{ $comment->id }})"><i class="fa fa-pencil"></i> Edit</a>
+                    <a class="ui mini yellow button right floated" onClick="editFormModal('', {{ $comment->id }})" title="Edit"><i class="fa fa-pencil"></i></a>
                 @endif                
             </td>
             <td class="center aligned" rowspan="2" valign="top">

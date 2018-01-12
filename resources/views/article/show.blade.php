@@ -22,6 +22,14 @@
                                 <a href="/user/{{ $comment->user->username }}" class="author">{{ $comment->user->username }}</a>
                                 <div class="metadata">
                                     <span class="date">{{ $comment->created_at->diffForHumans() }}</span>
+                                    <div class="rating">
+                                        @if (!$comment->likes()->hasLiked())
+                                            <a href="/comment/{{ $comment->id }}/like" title="Like this comment" role="button"><i class="heart icon"></i></a>
+                                        @else
+                                            <a href="/comment/{{ $comment->id }}/unlike" title="Unlike this comment" role="button"><i class="red heart icon"></i></a>
+                                        @endif
+                                        {{ $comment->likes_count }}
+                                    </div>                                    
                                 </div>
                                 <div class="text">
                                     {{ $comment->body }}

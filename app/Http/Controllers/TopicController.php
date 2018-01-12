@@ -60,7 +60,10 @@ class TopicController extends Controller
      */
     public function show($topic)
     {
-        $topic = Topic::whereSlug($topic)->with(['comments.user', 'comments.edits'])->first();
+        $topic = Topic::whereSlug($topic)
+                ->with(['comments.user', 'comments.edits'])
+                ->withCount('likes')
+                ->first();
 
         \Redis::incr("topic.{$topic->id}.views");
         return view('topic.show', compact('topic'));
@@ -128,5 +131,19 @@ class TopicController extends Controller
     public function destroy(Topic $topic)
     {
         //
+    }
+
+    public function like(Topic $topic)
+    {
+        $topic->like();
+
+        return back();
+    }
+
+    public function unlike(Topic $topic)
+    {
+        $topic->unlike();
+
+        return back();
     }
 }
