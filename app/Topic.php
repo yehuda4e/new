@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Topic extends Model
 {
+    use likeable;
+    
     protected $guarded = [];
 
     protected $perPage = 10;
@@ -48,21 +50,5 @@ class Topic extends Model
     public function getRouteKeyName()
     {
         return 'slug';
-    }
-
-    public function like()
-    {
-        if (!$this->likes()->where(['user_id' => auth()->id()])->exists()) {
-            $this->likes()->create([
-                'user_id' => auth()->id(),
-            ]);
-        }
-    }
-
-    public function unlike()
-    {
-        if ($this->likes()->where(['user_id' => auth()->id()])->exists()) {
-            $this->likes()->delete();
-        }
     }
 }

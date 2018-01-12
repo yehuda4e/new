@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
+    use Likeable;
+
     protected $fillable = ['user_id', 'body'];
 
     protected $withCount = ['likes'];
@@ -28,21 +30,5 @@ class Comment extends Model
     public function likes()
     {
         return $this->morphMany(Like::class, 'likeable');
-    }
-
-    public function like()
-    {
-        if (!$this->likes()->where(['user_id' => auth()->id()])->exists()) {
-            $this->likes()->create([
-                'user_id' => auth()->id(),
-            ]);
-        }
-    }
-
-    public function unlike()
-    {
-        if ($this->likes()->where(['user_id' => auth()->id()])->exists()) {
-            $this->likes()->delete();
-        }
     }
 }
