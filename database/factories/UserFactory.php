@@ -67,7 +67,7 @@ $factory->define(App\Forum::class, function ($faker) {
         'name' => $faker->sentence,
         'slug' => $faker->slug,
         'description' => $faker->paragraph,
-        'category_id' => 1
+        'category_id' => factory('App\ForumCategory')->create()->id
     ];
 });
 
@@ -78,6 +78,6 @@ $factory->define(App\Topic::class, function ($faker) {
         'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], $title),
         'body' => $faker->text,
         'user_id' => 1,
-        'forum_id' => 1
+        'forum_id' => factory('App\Forum')->create()->id
     ];
 });
