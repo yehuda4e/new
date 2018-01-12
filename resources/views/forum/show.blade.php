@@ -17,7 +17,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($topics = $forum->topics()->latest('updated_at')->paginate() as $topic)
+        @foreach ($topics as $topic)
         <tr>
             <td class="collapsing"><i class="fa fa-2x fa-envelope"></i></td>
             <td>
@@ -25,7 +25,7 @@
                 by <a href="/user/{{ $topic->user->username }}">{{ $topic->user->username }}</a> at {{ $topic->created_at->diffForHumans() }}
             </td> 
             <td class="collapsing center aligned">
-                {{ $topic->comments()->count() }} <strong>{{ str_plural('comment', $topic->comments()->count()) }}</strong><br>
+                {{ $topic->comments_count }} <strong>{{ str_plural('comment', $topic->comments_countp) }}</strong><br>
                 {{ $topic->views }} <strong>{{ str_plural('view', $topic->views) }}</strong>
             </td>
             <td>

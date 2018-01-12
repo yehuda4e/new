@@ -49,7 +49,8 @@ class ForumController extends Controller
      */
     public function show(Forum $forum)
     {
-        return view('forum.show', compact('forum'));
+        $topics = $forum->topics()->latest('updated_at')->with('user')->withCount('comments')->paginate();
+        return view('forum.show', compact(['forum', 'topics']));
     }
 
     /**

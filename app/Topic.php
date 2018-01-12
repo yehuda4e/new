@@ -37,7 +37,7 @@ class Topic extends Model
 
     public function lastComment()
     {
-        return $this->comments()->with('user')->latest()->first() ?? $this;
+        return $this->comments->last() ?? $this;
     }
 
     public function getViewsAttribute()
