@@ -17,7 +17,7 @@ class ReadTopicTest extends TestCase
             'user_id' => factory('App\User')->create()->id
         ]);
 
-        $this->get('topic/'. $topic->slug)
+        $this->get('/topic/'. $topic->slug)
             ->assertSee($topic->title)
             ->assertSee($topic->body);
     }
@@ -31,7 +31,7 @@ class ReadTopicTest extends TestCase
             'user_id' => factory('App\User')->create()->id
         ]);
 
-        $this->get('forum/'.$forum->slug)
+        $this->get('/forum/'.$forum->slug)
             ->assertSee($topics[0]->title)
             ->assertSee($topics[1]->title);
     }
