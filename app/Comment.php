@@ -10,8 +10,6 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'body'];
 
-    protected $withCount = ['likes'];
-
     public function commentable()
     {
         return $this->morphTo();
@@ -25,5 +23,10 @@ class Comment extends Model
     public function edits()
     {
         return $this->morphMany(Edit::class, 'editable');
+    }
+
+    public function getLikesCountAttribute()
+    {
+        return count($this->likes);
     }
 }
