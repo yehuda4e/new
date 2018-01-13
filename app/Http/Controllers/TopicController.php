@@ -89,6 +89,8 @@ class TopicController extends Controller
 
     public function updateComment(Topic $topic, Comment $comment)
     {
+        $this->authorize('update', $comment);
+        
         $this->validate(request(), [
             'edit' => 'required|min:2|max:4000'
         ]);
@@ -110,6 +112,8 @@ class TopicController extends Controller
      */
     public function update(Topic $topic)
     {
+        $this->authorize('update', $topic);
+
         $this->validate(request(), [
             'edit' => 'required|min:2|max:4000'
         ]);
