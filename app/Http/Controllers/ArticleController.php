@@ -69,18 +69,14 @@ class ArticleController extends Controller
 
     public function edit(Article $article)
     {
-        if ($article->user->id !== auth()->id()) {
-            return redirect('/');
-        }
+        $this->authorize('update', $article);
         
         return view('article.edit', compact('article'));
     }
 
     public function update(Article $article)
     {
-        if ($article->user->id !== auth()->id()) {
-            return redirect('/')->with('info', 'You can\'t edit article that is not your\'s.');
-        }
+        $this->authorize('update', $article);
         
         request()->merge([
             'slug' => preg_replace(['/\s+/', '/(-{2,})/'], ['-', '-'], request('slug'))
@@ -110,9 +106,7 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        if ($article->user->id !== auth()->id()) {
-            return back();
-        }
+        $this->authorize('delete', $article);
 
         $article->delete();
 
