@@ -17,9 +17,23 @@ class DeleteArticle extends TestCase
         $this->be($user);
 
         $article = factory('App\Article')->create(['user_id' => $user->id]);
-        $this->delete($article->slug);
 
-        $this->assertCount(0, $user->articles);
+        $comment = $article->comments()->create([
+            'body' => 'test',
+            'user_id' => $user->id
+        ]);
+
+        $edit = $article->edits()->create([
+            'body' => 'test',
+            'user_id' => $user->id
+        ]);
+
+        
+        $this->delete($article->slug);
+        
+        $this->assertDatabaseMissing('articles', $user->articles->toArray());
+        $this->assertDatabaseMissing('comments', $comment->toArray());
+        $this->assertDatabaseMissing('edits', $edit->toArray());
     }
 
     /** @test */
@@ -32,7 +46,7 @@ class DeleteArticle extends TestCase
 
         $this->delete($article->slug)
             ->assertStatus(302);
-        
-        $this->assertCount(1, $user->articles);
+
+        $this->assertDatabaseHas('articles', $article->toArray());
     }
 }
