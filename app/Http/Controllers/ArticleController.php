@@ -114,8 +114,6 @@ class ArticleController extends Controller
             return back();
         }
 
-        $article->edits()->delete();
-        $article->comments()->delete();
         $article->delete();
 
         return redirect('/')->with('info', 'The article deleted.');

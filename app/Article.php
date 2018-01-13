@@ -20,7 +20,15 @@ class Article extends Model
      */
     public $perPage = 3;
 
-    // protected $with = ['edits.user'];
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($article) {
+            $article->edits()->delete();
+            $article->comments()->delete();
+        });
+    }
 
     /**
      * User relationship
