@@ -45,7 +45,7 @@ class DeleteArticle extends TestCase
         $article = factory('App\Article')->create(['user_id' => $user->id]);
 
         $this->delete($article->slug)
-            ->assertStatus(302);
+            ->assertStatus(403);
 
         $this->assertDatabaseHas('articles', $article->toArray());
     }
