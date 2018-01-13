@@ -26,6 +26,9 @@ class Article extends Model
 
         static::deleting(function ($article) {
             $article->edits()->delete();
+            $article->comments()->each(function ($comment) {
+                $comment->likes()->delete();
+            });
             $article->comments()->delete();
         });
     }
