@@ -10,8 +10,6 @@ class Comment extends Model
 
     protected $fillable = ['user_id', 'body'];
 
-    protected $with = ['likes'];
-
     protected $withCount = ['likes'];
 
     public function commentable()

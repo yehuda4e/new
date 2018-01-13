@@ -61,7 +61,7 @@ class TopicController extends Controller
     public function show($topic)
     {
         $topic = Topic::whereSlug($topic)
-                ->with(['comments.user', 'comments.edits'])
+                ->with(['comments.user', 'comments.edits', 'comments.likes'])
                 ->withCount('likes')
                 ->first();
 

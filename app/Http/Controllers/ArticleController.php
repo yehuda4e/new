@@ -25,7 +25,7 @@ class ArticleController extends Controller
     public function show($article)
     {
         $article = Article::whereSlug($article)
-                            ->with(['user', 'category','comments.user'])
+                            ->with(['user', 'category','comments.user', 'comments.likes'])
                             ->withCount(['comments', 'edits'])
                             ->first();
 
