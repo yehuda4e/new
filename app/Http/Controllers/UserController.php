@@ -6,10 +6,8 @@ use App\User;
 
 class UserController extends Controller
 {
-    public function show(User $user) {
-        return view('user.show', [
-            'user' => $user->load('articles', 'comments')
-        ]);
+    public function show(User $user)
+    {
+        return view('user.show', compact('user'));
     }
-
 }
