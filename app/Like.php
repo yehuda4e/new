@@ -12,9 +12,4 @@ class Like extends Model
     {
         return $this->morphTo();
     }
-
-    public function ScopeHasLiked($query)
-    {
-        return $query->where(['user_id' => auth()->id()])->exists();
-    }
 }

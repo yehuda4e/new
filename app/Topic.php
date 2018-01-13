@@ -32,11 +32,6 @@ class Topic extends Model
         return $this->morphMany(Edit::class, 'editable');
     }
 
-    public function likes()
-    {
-        return $this->morphMany(Like::class, 'likeable');
-    }
-
     public function lastComment()
     {
         return $this->comments->last() ?? $this;

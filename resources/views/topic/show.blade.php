@@ -19,7 +19,7 @@
         <tr>
             <td id="{{ $topic->id }}">
                 <i class="fa fa-clock-o"></i> {{ $topic->created_at->diffForHumans() }}
-                @if (!$topic->likes()->hasLiked())
+                @if (!$topic->hasLiked())
                     <a href="/topic/{{ $topic->slug }}/like" title="Like this topic" role="button"><i class="heart icon"></i></a>
                 @else
                     <a href="/topic/{{ $topic->slug }}/unlike" title="Unlike this topic" role="button"><i class="red heart icon"></i></a>
@@ -73,7 +73,7 @@
         <tr>
             <td id="{{ $comment->id }}">
                 <i class="fa fa-clock-o"></i> {{ $comment->created_at->diffForHumans() }}
-                @if (!$comment->likes()->hasLiked())
+                @if (!$comment->hasLiked())
                     <a href="/comment/{{ $comment->id }}/like" title="Like this comment" role="button"><i class="heart icon"></i></a>
                 @else
                     <a href="/comment/{{ $comment->id }}/unlike" title="Unlike this comment" role="button"><i class="red heart icon"></i></a>
