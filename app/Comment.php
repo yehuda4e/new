@@ -15,7 +15,7 @@ class Comment extends Model
         parent::boot();
 
         static::deleting(function ($comment) {
-            $comment->comments()->delete();
+            $comment->replies()->delete();
             $comment->likes()->delete();
             $comment->edits()->delete();
         });
