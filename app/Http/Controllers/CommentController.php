@@ -30,7 +30,7 @@ class CommentController extends Controller
         $this->authorize('update', $comment);
 
         $this->validate(request(), [
-            'comment' => 'required:min:3|max:120'
+            'comment' => 'required|max:120'
         ]);
 
         $comment->edits()->create([
