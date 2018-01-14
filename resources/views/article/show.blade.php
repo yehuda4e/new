@@ -11,37 +11,10 @@
                 <h3 class="header">Comments</h3>
             </div>
             <div class="ui segment">
-                <div class="ui comments">
+                <div class="ui threaded comments">
                     @if ($article->comments_count)
                         @foreach ($article->comments as $comment)
-                        <div class="comment" id="{{ $comment->id }}">
-                            <a class="avatar">
-                                <img src="https://gravatar.com/avatar/{{ md5($comment->user->email) }}?d=retro">
-                            </a>
-                            <div class="content">
-                                <a href="/user/{{ $comment->user->username }}" class="author">{{ $comment->user->username }}</a>
-                                <div class="metadata">
-                                    <span class="date">{{ $comment->created_at->diffForHumans() }}</span>
-                                </div>
-                                <div class="text">
-                                    {{ $comment->body }}
-                                </div>
-                                <div class="actions">
-                                    <a class="reply">Reply</a>
-                                    @if (!$comment->hasLiked())
-                                        <a href="/comment/{{ $comment->id }}/like" title="Like this comment" role="button"><i class="heart icon"></i> {{ $comment->likes_count }} </a>
-                                    @else
-                                        <a href="/comment/{{ $comment->id }}/unlike" title="Unlike this comment" role="button"><i class="red heart icon"></i> {{ $comment->likes_count }} </a>
-                                    @endif
-                                    @can('update', $comment)
-                                    <a><i class="pencil icon"></i> Edit</a>
-                                    @endcan
-                                    @can('delete', $comment)
-                                    <a><i class="trash icon"></i> Delete</a>
-                                    @endcan
-                                </div>
-                            </div>
-                        </div>         
+                            @include ('article.comments')
                         @endforeach
                     @endif
                     <div class="ui dividing header"></div>
@@ -97,10 +70,27 @@
         });
     }
 
-    function editArticle(id) {
-        $(`#a${id}`).modal({
-            blurring: true
-        }).modal('show'); 
+    function editComment(commentId) {
+        const comment = document.getElementById(commentId);
+        const form = `
+        <form action="/comment/${commentId}" method="post" class="ui form">
+            <input type="hidden" name="_token" value="${$('meta[name="csrf-token"]').attr('content')}">
+            <input type="hidden" name="_method" value="patch">
+            <div class="field">
+                <textarea name="comment" rows="1">${comment.innerText}</textarea>
+            </div>
+            <button class="ui mini button">Update</button>
+        </form>
+        `;
+
+        comment.innerHTML = form;
+    }
+
+    function replay(commentId) {
+        const replyForm = document.getElementById(`reply${commentId}`);
+
+        replyForm.classList.toggle('hide');
+
     }
 </script>
 @endpush 
