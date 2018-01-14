@@ -24,6 +24,9 @@ Route::patch('settings/avatar', 'SettingsController@avatarAndCover');
 Route::patch('settings/password', 'SettingsController@password');
 Route::patch('settings/signature', 'SettingsController@signature');
 
+Route::post('/comment/{comment}', 'CommentController@store');
+Route::patch('/comment/{comment}', 'CommentController@update');
+Route::delete('/comment/{comment}', 'CommentController@destroy');
 Route::get('/comment/{comment}/like', 'CommentController@like');
 Route::get('/comment/{comment}/unlike', 'CommentController@unlike');
 

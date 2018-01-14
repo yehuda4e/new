@@ -54,6 +54,6 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return false;
+        return $comment->user->id === $user->id;
     }
 }
