@@ -42,7 +42,7 @@
                         </div>
                         @foreach ($user->comments as $comment)
                         <div class="ui segment">
-                            <a href="/{{ $comment->commentable->slug }}#{{ $comment->id }}">{{ $comment->body }}</a>
+                            <a>{{ $comment->body }}</a>
                         </div>
                         @endforeach
                     </div>
